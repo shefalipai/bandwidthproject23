@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
+
 @st.cache_data
 def get_UN_data():
     AWS_BUCKET_URL = "https://streamlit-demo-data.s3-us-west-2.amazonaws.com"
@@ -24,6 +25,8 @@ try:
         data = pd.melt(data, id_vars=["index"]).rename(
             columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
         )
+        st.write(df)
+        st.write(data)
         chart = (
             alt.Chart(data)
             .mark_area(opacity=0.3)
@@ -34,6 +37,16 @@ try:
             )
         )
         st.altair_chart(chart, use_container_width=True)
+except:
+    e = Error
+
+    st.error(
+        """
+        **This demo requires internet access.**
+        Connection error: %s
+    """
+        % e.reason
+    )
 # except URLError as e:
 #     st.error(
 #         """
@@ -42,8 +55,8 @@ try:
 #     """
 #         % e.reason
 #     )
-except:
-    st.error("""
-#         **This demo requires internet access.**
-#         Connection error: %s
-#     """)
+# except:
+#     st.error("""
+# #         **This demo requires internet access.**
+# #         Connection error: %s
+# #     """)
